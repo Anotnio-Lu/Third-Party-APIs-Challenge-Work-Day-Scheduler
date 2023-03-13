@@ -53,7 +53,7 @@ $(function () {
 
     list.push(timeInto);
 
-    localStorage.setItem("to do list", JSON.stringify(list))
+    localStorage.setItem("To do list", JSON.stringify(list))
 
   })
 
@@ -62,5 +62,26 @@ $(function () {
     this.input
   }
 
+  function print(){
+    var Fulllist = JSON.parse(localStorage.getItem("To do list"));
+    
+    if (Fulllist !== null) {
+      list = Fulllist;
+    }
+
+    $( "textarea" ).each(function() {
+      var divId = $( this ).parent().attr("id")
+      var div = $( this )
+
+      $.each (list, function( index, values ) {
+        var storedId = values.id
+        if(divId == storedId){
+          div.text(values.input)
+        }
+      })
+    });
+  }
+
+  print()
 
 });
