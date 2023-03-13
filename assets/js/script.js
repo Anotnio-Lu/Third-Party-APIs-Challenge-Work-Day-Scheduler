@@ -3,6 +3,9 @@
 // in the html.
 var list = []
 
+var today = dayjs();
+$('#currentDay').text(today.format('dddd, MMM D'));
+
 $(function () {
     // TODO: Add a listener for click events on the save button. This code should
     // use the id in the containing time-block as a key to save the user input in
@@ -24,13 +27,12 @@ $(function () {
     // TODO: Add code to display the current date in the header of the page.
 
   var main = $('.main-container')
-  var saveBtn = $('.saveBtn')
 
 
-  main.on('click', '.fas', function(event){
+  main.on('click', '.saveBtn', function(event){
 
     var item = $(this)
-    var parent = item.parent().parent('div')
+    var parent = item.parent('div')
     var text = parent.children('textarea').val()
     var dataId = parent.attr("id");
 
@@ -83,5 +85,25 @@ $(function () {
   }
 
   print()
+
+  changeHighlight()
+
+  function changeHighlight(){
+    $( ".row" ).each(function() {
+      var rowId = $( this ).attr("id")
+      var hour = dayjs().get('hour')
+
+      if(rowId == hour){
+        $( this ).removeClass( "future past" ).addClass( "present" );
+      }
+      if(rowId < hour){
+        $( this ).removeClass( "present future" ).addClass( "past" );
+      }
+      if(rowId > hour){
+        $( this ).removeClass( "present past" ).addClass( "future" );
+      }
+    });
+
+  }
 
 });
