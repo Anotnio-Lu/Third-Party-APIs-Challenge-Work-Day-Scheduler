@@ -1,38 +1,12 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
+
 var list = []
 
-var today = dayjs();
-$('#currentDay').text(today.format('dddd, MMM D'));
-
 $(function () {
-    // TODO: Add a listener for click events on the save button. This code should
-    // use the id in the containing time-block as a key to save the user input in
-    // local storage. HINT: What does `this` reference in the click listener
-    // function? How can DOM traversal be used to get the "hour-x" id of the
-    // time-block containing the button that was clicked? How might the id be
-    // useful when saving the description in local storage?
-    //
-    // TODO: Add code to apply the past, present, or future class to each time
-    // block by comparing the id to the current hour. HINTS: How can the id
-    // attribute of each time-block be used to conditionally add or remove the
-    // past, present, and future classes? How can Day.js be used to get the
-    // current hour in 24-hour time?
-    //
-    // TODO: Add code to get any user input that was saved in localStorage and set
-    // the values of the corresponding textarea elements. HINT: How can the id
-    // attribute of each time-block be used to do this?
-    //
-    // TODO: Add code to display the current date in the header of the page.
-
   var main = $('.main-container')
 
-
+  //click listener to save input into the local storage
   main.on('click', '.saveBtn', function(event){
-
-    var item = $(this)
-    var parent = item.parent('div')
+    var parent = $(this).parent('div')
     var text = parent.children('textarea').val()
     var dataId = parent.attr("id");
 
@@ -56,7 +30,6 @@ $(function () {
     list.push(timeInto);
 
     localStorage.setItem("To do list", JSON.stringify(list))
-
   })
 
   function listObject(){
@@ -64,6 +37,7 @@ $(function () {
     this.input
   }
 
+  //function that displays saved information that was stored in local storage
   function print(){
     var Fulllist = JSON.parse(localStorage.getItem("To do list"));
     
@@ -88,22 +62,27 @@ $(function () {
 
   changeHighlight()
 
+  // function that changes the class of div
   function changeHighlight(){
-    $( ".row" ).each(function() {
-      var rowId = $( this ).attr("id")
-      var hour = dayjs().get('hour')
+    setInterval(function() {
+      $( ".row" ).each(function() {
+        var rowId = $( this ).attr("id")
+        var hour = dayjs().get('hour')
 
-      if(rowId == hour){
-        $( this ).removeClass( "future past" ).addClass( "present" );
-      }
-      if(rowId < hour){
-        $( this ).removeClass( "present future" ).addClass( "past" );
-      }
-      if(rowId > hour){
-        $( this ).removeClass( "present past" ).addClass( "future" );
-      }
-    });
-
+        if(rowId == hour){
+          $( this ).removeClass( "future past" ).addClass( "present" );
+        }
+        if(rowId < hour){
+          $( this ).removeClass( "present future" ).addClass( "past" );
+        }
+        if(rowId > hour){
+          $( this ).removeClass( "present past" ).addClass( "future" );
+        }
+      });
+    }, 100);
   }
 
+  var today = dayjs();
+  $('#currentDay').text(today.format('dddd, MMM D'));
+  
 });
